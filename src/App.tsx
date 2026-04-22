@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, PlaySquare, User, CheckCircle2, ChevronRight, Search, MapPin, Clock, Award, PlayCircle, Star, BarChart3, Users, Leaf, Calendar, FileText, Settings, ShieldCheck, PieChart, Activity, LogOut, ArrowRight, Heart, Trophy, Medal, Map, Plus, X, Download } from 'lucide-react';
+import { Home, Compass, PlaySquare, User, CheckCircle2, ChevronRight, Search, MapPin, Clock, Award, PlayCircle, Star, Users, Leaf, Calendar, FileText, Settings, ShieldCheck, Activity, LogOut, ArrowRight, Heart, Medal, Map, Plus, X, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -299,6 +299,14 @@ function Navbar({ role, onLogout }: { role: Role; onLogout: () => void }) {
           </div>
           <span className="font-bold text-lg tracking-tight">青木志愿</span>
         </Link>
+
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map(link => (
+            <Link key={link.path} to={link.path} className="px-4 py-2 rounded-full text-sm font-medium text-neutral-600 hover:text-emerald-600 hover:bg-emerald-50 transition-colors flex items-center gap-1.5">
+              <link.icon className="w-4 h-4" /> {link.label}
+            </Link>
+          ))}
+        </nav>
         
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-neutral-600 bg-neutral-100 px-4 py-1.5 rounded-full">
@@ -964,7 +972,7 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
     { id: 3, name: '陈同学', project: '垃圾分类科普讲座', status: 'pending', time: '昨天' }
   ]);
 
-  const handleReview = (id: number, action: 'approve' | 'reject') => {
+  const handleReview = (id: number, _action: 'approve' | 'reject') => {
     setApplicants(prev => prev.filter(app => app.id !== id));
     // In a real app, this would make an API call
     // We just remove them from the UI for the demo
@@ -994,6 +1002,9 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
       totalNeeded: participants,
       desc
     };
+    
+    // In a real app we would dispatch newProject to global state here
+    console.log("New project published:", newProject);
 
     // We only simulate closing the modal now to prevent state issues
     setShowPublishModal(false);
@@ -1441,11 +1452,11 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
                           <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> 2026.04.25 集合</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="flex -space-x-2">
-                            {[...Array(3)].map((_, i) => (
-                              <div key={i} className="w-6 h-6 rounded-full bg-neutral-200 border-2 border-white" />
-                            ))}
-                          </div>
+                    <div className="flex -space-x-2">
+                      {[...Array(3)].map((_, j) => (
+                        <div key={j} className="w-6 h-6 rounded-full bg-neutral-200 border-2 border-white" />
+                      ))}
+                    </div>
                           <span className="text-xs text-neutral-400">等12名志愿者同行</span>
                         </div>
                       </div>
