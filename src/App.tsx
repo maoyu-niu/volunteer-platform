@@ -815,7 +815,7 @@ function TrainingCenter() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1 space-y-2">
-          {filters.map((cat, i) => (
+          {filters.map((cat) => (
             <button 
               key={cat}
               onClick={() => setFilter(cat)}
@@ -1021,7 +1021,6 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
 
   if (role === 'admin' || role === 'community') {
     const isCommunity = role === 'community';
-    const themeColor = isCommunity ? 'blue' : 'indigo';
     const bgClass = isCommunity ? 'bg-blue-500' : 'bg-indigo-500';
     const textClass = isCommunity ? 'text-blue-600' : 'text-indigo-600';
     const lightBgClass = isCommunity ? 'bg-blue-50' : 'bg-indigo-50';
