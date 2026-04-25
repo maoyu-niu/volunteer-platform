@@ -20,7 +20,7 @@ const PROJECTS = [
     time: '2026.04.25 - 05.01',
     location: '阳光新村南区',
     skills: ['园林', '设计', '体力'],
-    image: '/flower-gallery.png',
+    image: '/project-flower.jpg',
     tags: ['急招', '专业对口'],
     requiredTraining: ['花廊设计基础', '安全施工规范'],
     participants: 12,
@@ -34,7 +34,7 @@ const PROJECTS = [
     time: '长期周末',
     location: '幸福街道敬老院',
     skills: ['沟通', '耐心', '医疗基础'],
-    image: 'https://images.unsplash.com/photo-1516307365426-bea591f05011?q=80&w=2070&auto=format&fit=crop',
+    image: '/project-elderly.jpg',
     tags: ['持续招募'],
     requiredTraining: ['老年人心理学', '急救常识'],
     participants: 45,
@@ -72,10 +72,10 @@ const PROJECTS = [
 ];
 
 const COURSES = [
-  { id: 1, title: '花廊设计基础', type: '专项培训', duration: '12:45', views: '2.1k', img: '/flower-gallery.png', required: true, desc: '本课程专为“社区花廊共建项目”设计，详细讲解花廊的基础结构、选材标准、搭建步骤以及植物配置。无论你是否有园林经验，都能通过本视频快速掌握花廊建设的核心要点。' },
-  { id: 2, title: '安全施工规范', type: '基础培训', duration: '08:20', views: '5.4k', img: '/safety-training.jpg', required: true, desc: '志愿服务千万条，安全第一条。本视频详细讲解了户外志愿服务中可能遇到的风险及防范措施，包括工具使用规范、中暑预防等。' },
-  { id: 3, title: '志愿服务沟通技巧', type: '技能培训', duration: '15:30', views: '1.2k', img: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=600&auto=format&fit=crop', required: false, desc: '良好的沟通是服务顺利开展的桥梁。本课程教你如何与不同年龄段的居民、服务对象进行有效且温暖的沟通。' },
-  { id: 4, title: '社区文化活动策划', type: '专项培训', duration: '22:10', views: '800', img: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop', required: false, desc: '从0到1策划一场成功的社区活动。包括需求调研、流程设计、人员分工、物资筹备及应急预案。' },
+  { id: 1, title: '花廊设计基础', type: '专项培训', duration: '12:45', views: '2.1k', img: '/victor-malyushev-w_N-XCjiM0o-unsplash.jpg', required: true, desc: '本课程专为“社区花廊共建项目”设计，详细讲解花廊的基础结构、选材标准、搭建步骤以及植物配置。无论你是否有园林经验，都能通过本视频快速掌握花廊建设的核心要点。' },
+  { id: 2, title: '安全施工规范', type: '基础培训', duration: '08:20', views: '5.4k', img: '/farhan-hakim-dariman-lHlJyVT_gGs-unsplash.jpg', required: true, desc: '志愿服务千万条，安全第一条。本视频详细讲解了户外志愿服务中可能遇到的风险及防范措施，包括工具使用规范、中暑预防等。' },
+  { id: 3, title: '志愿服务沟通技巧', type: '技能培训', duration: '15:30', views: '1.2k', img: '/md-mahdi-uatFj9XREB8-unsplash.jpg', required: false, desc: '良好的沟通是服务顺利开展的桥梁。本课程教你如何与不同年龄段的居民、服务对象进行有效且温暖的沟通。' },
+  { id: 4, title: '社区文化活动策划', type: '专项培训', duration: '22:10', views: '800', img: '/chang-duong-wT7qu4SZib4-unsplash.jpg', required: false, desc: '从0到1策划一场成功的社区活动。包括需求调研、流程设计、人员分工、物资筹备及应急预案。' },
 ];
 
 // App Component
@@ -870,6 +870,7 @@ function VideoPlayer({ completedCourses, setCompletedCourses }: { completedCours
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isSimulating, setIsSimulating] = useState(false);
   
   const courseId = Number(id);
   const course = COURSES.find(c => c.id === courseId) || COURSES[0];
@@ -883,6 +884,15 @@ function VideoPlayer({ completedCourses, setCompletedCourses }: { completedCours
     if (!isCompleted) {
       setCompletedCourses([...completedCourses, courseId]);
     }
+  };
+
+  const handleSimulatePlay = () => {
+    if (isCompleted || isSimulating) return;
+    setIsSimulating(true);
+    window.setTimeout(() => {
+      setIsSimulating(false);
+      handleVideoEnd();
+    }, 1200);
   };
 
   return (
@@ -902,19 +912,35 @@ function VideoPlayer({ completedCourses, setCompletedCourses }: { completedCours
       </div>
 
       <div className="aspect-video bg-black rounded-3xl overflow-hidden relative mb-6 shadow-2xl group">
-        <video 
-          className="w-full h-full object-contain"
-          controls
-          poster={course.img}
-          onEnded={handleVideoEnd}
-          src="/training-video.mp4"
+        <button
+          type="button"
+          onClick={handleSimulatePlay}
+          className="w-full h-full relative focus:outline-none"
         >
-          您的浏览器不支持视频播放。
-        </video>
+          <img
+            src="/hakim-menikh-owS6oZm9hIY-unsplash.jpg"
+            alt={course.title}
+            className={cn(
+              "w-full h-full object-cover transition-transform duration-700",
+              isSimulating ? "scale-[1.02]" : "group-hover:scale-[1.02]"
+            )}
+          />
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-white/90 backdrop-blur rounded-2xl px-5 py-3 shadow-xl flex items-center gap-2 text-emerald-600 font-bold text-sm">
+              <PlayCircle className={cn("w-5 h-5", isSimulating ? "animate-pulse" : "")} />
+              {isSimulating ? "模拟播放中..." : isCompleted ? "已完成" : "点击模拟播放"}
+            </div>
+          </div>
+        </button>
         
-        {/* Progress bar logic relies on native controls now, but we keep the visual completion indicator */}
         <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/20 pointer-events-none">
-          <div className={cn("h-full bg-emerald-500 transition-all duration-1000", isCompleted ? "w-full" : "w-0")} />
+          <div
+            className={cn(
+              "h-full bg-emerald-500 transition-all duration-700",
+              isCompleted ? "w-full" : isSimulating ? "w-3/5" : "w-0"
+            )}
+          />
         </div>
       </div>
 
@@ -1340,7 +1366,7 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10 flex flex-col items-center text-center">
               <div className="w-24 h-24 rounded-full bg-neutral-200 border-4 border-white shadow-lg overflow-hidden mb-4">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop" alt="Avatar" className="w-full h-full object-cover" />
+                <img src="/avatar-cartoon.jpg" alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <h1 className="text-2xl font-bold mb-1">林晓月</h1>
               <p className="text-neutral-500 text-sm mb-6">风景园林专业大三学生 | 热爱自然与艺术</p>
@@ -1439,7 +1465,7 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-2xl border border-emerald-100 bg-emerald-50/50 hover:bg-emerald-50 transition-colors group relative overflow-hidden">
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
                       <div className="w-full sm:w-32 h-24 rounded-xl overflow-hidden shrink-0">
-                        <img src="/flower-gallery.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="img" />
+                        <img src="/project-flower.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="img" />
                       </div>
                       <div className="flex-1 w-full">
                         <div className="flex items-center justify-between mb-2">
@@ -1468,7 +1494,7 @@ function PersonalCenter({ role, completedCourses }: { role: Role, completedCours
                     <div className="space-y-4">
                       {[
                         { title: '垃圾分类科普讲座', date: '2026.03.15', hours: 2, role: '主讲人', img: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=200&auto=format&fit=crop' },
-                        { title: '春节社区慰问孤寡老人', date: '2026.02.10', hours: 4, role: '陪护员', img: 'https://images.unsplash.com/photo-1516307365426-bea591f05011?q=80&w=200&auto=format&fit=crop' },
+                          { title: '春节社区慰问孤寡老人', date: '2026.02.10', hours: 4, role: '陪护员', img: '/project-elderly.jpg' },
                       ].map((p, i) => (
                         <div key={i} className="flex items-center gap-4 p-4 rounded-2xl border border-neutral-100 hover:border-neutral-200 hover:bg-neutral-50 transition-all bg-white">
                           <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
